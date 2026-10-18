@@ -33,6 +33,8 @@ export type Action =
   | { type: 'removeAssignment'; id: string }
   | { type: 'confirm'; id: string }
   | { type: 'unconfirm'; id: string }
+    | { type: 'addDayCategory'; dayPlanId: string; categoryId: string }
+  | { type: 'removeDayCategory'; dayPlanId: string; categoryId: string }
   | { type: 'replaceAll'; data: AppData }
 
 // プランの日程に合わせて、足りない日を追加する(すでにある日は消さない)
@@ -146,7 +148,31 @@ function reducer(data: AppData, action: Action): AppData {
       }
     case 'unconfirm':
       return { ...data, assignments: unconfirmAssignment(data.assignments, action.id, now) }
-    case 'replaceAll':
+        case 'addDayCategory':
+      return {
+        ...data,
+        dayPlans: data.dayPlans.map((d) =>
+          d.id === action.dayPlanId && !d.categoryIds.includes(action.categoryId)
+            ? { ...d, categoryIds: [...d.categoryIds, action.categoryId] }
+            : d,
+        ),
+      }
+    case 'removeDayCategory': {
+      // 案が入っている枠は、外せない(消えてしまうのを防ぐため)
+      const hasItems = data.assignments.some(
+        (a) => a.dayPlanId === action.dayPlanId && a.categoryId === action.categoryId,
+      )
+      if (hasItems) return data
+      return {
+        ...data,
+        dayPlans: data.dayPlans.map((d) =>
+          d.id === action.dayPlanId
+            ? { ...d, categoryIds: d.categoryIds.filter((id) => id !== action.categoryId) }
+            : d,
+        ),
+      }
+    }
+      case 'replaceAll':
       return action.data
     default:
       return data

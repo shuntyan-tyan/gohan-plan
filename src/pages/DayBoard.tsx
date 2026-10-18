@@ -5,7 +5,7 @@ import { Link, useParams } from 'react-router-dom'
 import { Check, ChevronLeft, X } from 'lucide-react'
 import { useStore } from '../store'
 import { findConflictingConfirmed, formatDateLabel } from '../logic'
-import type { Idea } from '../types'
+import type { Category, Idea } from '../types'
 
 // 枠の中で「アイデアを入れる」ための、小さな選択欄
 function AddIdeaRow({
@@ -44,6 +44,45 @@ function AddIdeaRow({
       >
         入れる
       </button>
+    </div>
+  )
+}
+
+// その日に「枠」(間食・カフェなど)を足すための、小さな選択欄
+function AddSlotRow({
+  categories,
+  onAdd,
+}: {
+  categories: Category[]
+  onAdd: (categoryId: string) => void
+}) {
+  const [selected, setSelected] = useState('')
+
+  if (categories.length === 0) return null
+
+  return (
+    <div className="slot">
+      <div className="add-idea-row">
+        <select value={selected} onChange={(e) => setSelected(e.target.value)}>
+          <option value="">枠を足す(間食・カフェなど)</option>
+          {categories.map((c) => (
+            <option key={c.id} value={c.id}>
+              {c.name}
+            </option>
+          ))}
+        </select>
+        <button
+          type="button"
+          className="button-secondary"
+          disabled={!selected}
+          onClick={() => {
+            onAdd(selected)
+            setSelected('')
+          }}
+        >
+          足す
+        </button>
+      </div>
     </div>
   )
 }
@@ -116,6 +155,7 @@ export default function DayBoard() {
 
       {days.map((day, index) => {
         const slots = categories.filter((c) => day.categoryIds.includes(c.id))
+        const unusedCategories = categories.filter((c) => !day.categoryIds.includes(c.id))
         return (
           <details key={day.id} className="day-block" open={index === 0}>
             <summary>
@@ -138,6 +178,23 @@ export default function DayBoard() {
                     <span className={confirmedCount > 0 ? 'slot-status done' : 'slot-status'}>
                       {confirmedCount > 0 ? `確定 ${confirmedCount}` : '未確定'}
                     </span>
+                    {list.length === 0 && (
+                      <button
+                        type="button"
+                        className="icon-button"
+                        style={{ marginLeft: 'auto' }}
+                        aria-label={`${cat.name}の枠を外す`}
+                        onClick={() =>
+                          dispatch({
+                            type: 'removeDayCategory',
+                            dayPlanId: day.id,
+                            categoryId: cat.id,
+                          })
+                        }
+                      >
+                        <X size={18} />
+                      </button>
+                    )}
                   </h3>
 
                   <ul className="assignment-list">
@@ -208,6 +265,13 @@ export default function DayBoard() {
                 </div>
               )
             })}
+
+            <AddSlotRow
+              categories={unusedCategories}
+              onAdd={(categoryId) =>
+                dispatch({ type: 'addDayCategory', dayPlanId: day.id, categoryId })
+              }
+            />
           </details>
         )
       })}
