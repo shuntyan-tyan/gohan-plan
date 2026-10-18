@@ -1,0 +1,475 @@
+/* アプリ全体の見た目を決めるファイルです。 */
+
+:root {
+  --bg: #fafaf7;
+  --card: #ffffff;
+  --text: #222222;
+  --muted: #6b6b66;
+  --border: #e3e1da;
+  --primary: #e8590c;
+  --primary-text: #ffffff;
+  --confirmed-bg: #e6f6ea;
+  --confirmed-border: #2f9e44;
+  --confirmed-text: #1b6b2f;
+  --danger: #c92a2a;
+  --danger-bg: #fff0f0;
+  color-scheme: light dark;
+}
+
+/* ダークモード(暗い画面)のときの色 */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #17171a;
+    --card: #222226;
+    --text: #f0efe9;
+    --muted: #a3a29b;
+    --border: #37373d;
+    --primary: #ff8a4c;
+    --primary-text: #1a1a1a;
+    --confirmed-bg: #1d3a27;
+    --confirmed-border: #51cf66;
+    --confirmed-text: #a9e9b6;
+    --danger: #ff8787;
+    --danger-bg: #3a2024;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, 'Hiragino Sans', 'Yu Gothic', 'Noto Sans JP', sans-serif;
+  line-height: 1.6;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* 画面全体の幅と余白(iPhoneの上下の安全な範囲も考えています) */
+.page {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: calc(16px + env(safe-area-inset-top)) 16px calc(110px + env(safe-area-inset-bottom));
+}
+
+.app-title {
+  font-size: 1.6rem;
+  margin: 8px 0 4px;
+}
+
+h2 {
+  font-size: 1.15rem;
+  margin: 0 0 8px;
+}
+
+h3 {
+  font-size: 1rem;
+  margin: 0 0 8px;
+}
+
+a {
+  color: var(--primary);
+}
+
+/* ---- ボタン ---- */
+button {
+  font: inherit;
+  min-height: 44px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.button-primary {
+  background: var(--primary);
+  color: var(--primary-text);
+  border: 0;
+  padding: 0 18px;
+  font-weight: 700;
+}
+
+.button-secondary {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+  padding: 0 14px;
+}
+
+.icon-button {
+  background: transparent;
+  color: var(--muted);
+  border: 0;
+  min-width: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 画面の下に浮かぶ追加ボタン */
+.fab {
+  position: fixed;
+  bottom: calc(16px + env(safe-area-inset-bottom));
+  left: 50%;
+  transform: translateX(-50%);
+  min-height: 52px;
+  padding: 0 22px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--primary);
+  color: var(--primary-text);
+  border: 0;
+  border-radius: 999px;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.fab-row {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: calc(16px + env(safe-area-inset-bottom));
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  padding: 0 16px;
+}
+
+.fab-row .fab {
+  position: static;
+  transform: none;
+  flex: 1;
+  max-width: 240px;
+  justify-content: center;
+}
+
+/* ---- 入力欄 ---- */
+.form {
+  display: grid;
+  gap: 12px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  margin: 16px 0;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+/* 文字の大きさを16pxにすると、iPhoneで入力時に画面が勝手に拡大されません */
+input,
+select,
+textarea {
+  width: 100%;
+  font: inherit;
+  font-size: 16px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.form-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+/* ---- 文章 ---- */
+.hint {
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin: 4px 0;
+}
+
+.empty {
+  color: var(--muted);
+  text-align: center;
+  padding: 24px 0;
+}
+
+.error-text {
+  color: var(--danger);
+  margin: 0;
+}
+
+.error-banner {
+  background: var(--danger-bg);
+  color: var(--danger);
+  border: 1px solid var(--danger);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--muted);
+  text-decoration: none;
+}
+
+/* ---- リスト共通 ---- */
+.plan-list,
+.menu-list,
+.idea-list,
+.assignment-list,
+.confirmed-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* ---- ホーム画面 ---- */
+.plan-card {
+  display: flex;
+  align-items: center;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  margin-bottom: 12px;
+}
+
+.plan-card-link {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 14px 16px;
+  color: inherit;
+  text-decoration: none;
+  min-width: 0;
+}
+
+.plan-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.plan-period,
+.plan-count {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.plan-memo {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  white-space: pre-wrap;
+}
+
+/* ---- プラン画面 ---- */
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  margin-bottom: 12px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.menu-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-text small {
+  color: var(--muted);
+}
+
+/* ---- アイデア置き場 ---- */
+.idea-group {
+  margin-top: 20px;
+}
+
+.idea-card {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 8px;
+}
+
+.idea-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.idea-name {
+  font-size: 1.05rem;
+}
+
+.idea-sub {
+  color: var(--muted);
+  font-size: 0.9rem;
+  overflow-wrap: anywhere;
+}
+
+.idea-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.idea-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 32px;
+}
+
+.idea-actions {
+  display: flex;
+  flex-shrink: 0;
+}
+
+/* ---- 日ごとの案 ---- */
+.day-block {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 0 14px;
+  margin-bottom: 14px;
+}
+
+.day-block summary {
+  padding: 14px 0;
+  cursor: pointer;
+  font-size: 1.1rem;
+}
+
+.slot {
+  border-top: 1px solid var(--border);
+  padding: 12px 0;
+}
+
+.slot h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.slot-status {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 1px 8px;
+}
+
+.slot-status.done {
+  color: var(--confirmed-text);
+  background: var(--confirmed-bg);
+  border-color: var(--confirmed-border);
+}
+
+.assignment {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 8px;
+}
+
+.assignment.confirmed {
+  background: var(--confirmed-bg);
+  border-color: var(--confirmed-border);
+}
+
+.assignment-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.assignment-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.badge-confirmed {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  width: fit-content;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--confirmed-text);
+}
+
+.add-idea-row {
+  display: flex;
+  gap: 8px;
+}
+
+.add-idea-row select {
+  flex: 1;
+}
+
+/* ---- 確定した予定 ---- */
+.confirmed-day h2 {
+  font-size: 1.3rem;
+  margin: 24px 0 8px;
+  padding-bottom: 4px;
+  border-bottom: 2px solid var(--primary);
+}
+
+.confirmed-slot h3 {
+  margin: 12px 0 6px;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.unconfirmed {
+  color: var(--muted);
+  padding: 8px 12px;
+  border: 1px dashed var(--border);
+  border-radius: 10px;
+  margin: 0;
+}
+
+.confirmed-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  background: var(--confirmed-bg);
+  border: 1px solid var(--confirmed-border);
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 8px;
+}
+
+.confirmed-name {
+  font-size: 1.3rem;
+}
