@@ -3,6 +3,6 @@ import { defineConfig } from 'vite'
 
 // https://vite.dev/config/
 export default defineConfig({
-    base: '/gohan-plan/',
+  base: '/gohan-plan/',
   plugins: [react()],
 })

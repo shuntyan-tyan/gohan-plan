@@ -473,3 +473,25 @@ textarea {
 .confirmed-name {
   font-size: 1.3rem;
 }
+
+
+/* ---- iPhoneの日付入力欄の大きさをそろえる ---- */
+input,
+select,
+textarea {
+  min-width: 0;
+  max-width: 100%;
+}
+
+input[type='date'] {
+  -webkit-appearance: none;
+  appearance: none;
+  display: block;
+  height: 48px;
+  text-align: left;
+}
+
+input[type='date']::-webkit-date-and-time-value {
+  text-align: left;
+  min-height: 1.5em;
+}
