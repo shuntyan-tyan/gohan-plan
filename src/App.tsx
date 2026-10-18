@@ -6,6 +6,7 @@ import PlanDetail from './pages/PlanDetail'
 import IdeaBoard from './pages/IdeaBoard'
 import DayBoard from './pages/DayBoard'
 import Confirmed from './pages/Confirmed'
+import SharedJoin from './pages/SharedJoin'
 
 export default function App() {
   return (
@@ -15,6 +16,7 @@ export default function App() {
       <Route path="/plan/:planId/ideas" element={<IdeaBoard />} />
       <Route path="/plan/:planId/days" element={<DayBoard />} />
       <Route path="/plan/:planId/confirmed" element={<Confirmed />} />
+      <Route path="/shared/:sharedId" element={<SharedJoin />} />
       <Route
         path="*"
         element={

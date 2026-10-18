@@ -7,6 +7,7 @@
 
 // 旅行やお出かけの計画ひとつ分
 export type Plan = {
+    sharedId?: string // 家族と共有しているときの、共有用の名前
   id: string
   title: string
   startDate: string | null // 例: "2026-11-01"。未定のときは null
